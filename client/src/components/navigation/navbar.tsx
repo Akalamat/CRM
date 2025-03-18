@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Building2, FolderKanban, Home, LogOut } from "lucide-react";
+import { Building2, Home, LogOut, PieChart, Users } from "lucide-react";
 
 export default function Navbar() {
   const { user, logoutMutation } = useAuth();
@@ -20,16 +20,22 @@ export default function Navbar() {
                 Home
               </Button>
             </Link>
+            <Link href="/dashboard">
+              <Button variant="ghost" className="flex items-center">
+                <PieChart className="w-4 h-4 mr-2" />
+                Dashboard
+              </Button>
+            </Link>
             <Link href="/deals">
               <Button variant="ghost" className="flex items-center">
                 <Building2 className="w-4 h-4 mr-2" />
                 Deals
               </Button>
             </Link>
-            <Link href="/projects">
+            <Link href="/credits">
               <Button variant="ghost" className="flex items-center">
-                <FolderKanban className="w-4 h-4 mr-2" />
-                Projects
+                <Users className="w-4 h-4 mr-2" />
+                Credits
               </Button>
             </Link>
           </div>

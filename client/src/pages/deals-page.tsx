@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import DealForm from "@/components/deals/deal-form";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import {
@@ -22,10 +22,36 @@ import {
 } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "Done":
+      return "bg-green-100 text-green-700";
+    case "Progress":
+      return "bg-blue-100 text-blue-700";
+    case "Stuck":
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+};
+
+const getPriorityColor = (priority: string) => {
+  switch (priority) {
+    case "High":
+      return "bg-red-100 text-red-700";
+    case "Medium":
+      return "bg-yellow-100 text-yellow-700";
+    case "Low":
+      return "bg-green-100 text-green-700";
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+};
+
 export default function DealsPage() {
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const { toast } = useToast();
-  
+
   const { data: deals, isLoading } = useQuery<Deal[]>({
     queryKey: ["/api/deals"],
   });
@@ -73,6 +99,26 @@ export default function DealsPage() {
     },
   });
 
+  const deleteDealMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/deals/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/deals"] });
+      toast({
+        title: "Success",
+        description: "Deal deleted successfully",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -99,6 +145,9 @@ export default function DealsPage() {
             <TableHead>Deal Name</TableHead>
             <TableHead>Account Name</TableHead>
             <TableHead>Quarter</TableHead>
+            <TableHead>Area</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Priority</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -108,25 +157,45 @@ export default function DealsPage() {
               <TableCell>{deal.dealName}</TableCell>
               <TableCell>{deal.accountName}</TableCell>
               <TableCell>{deal.quarter}</TableCell>
+              <TableCell>{deal.area}</TableCell>
               <TableCell>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      Edit
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Edit Deal</DialogTitle>
-                    </DialogHeader>
-                    <DealForm
-                      defaultValues={deal}
-                      onSubmit={(data) =>
-                        updateDealMutation.mutate({ id: deal.id, data })
-                      }
-                    />
-                  </DialogContent>
-                </Dialog>
+                <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(deal.status)}`}>
+                  {deal.status}
+                </span>
+              </TableCell>
+              <TableCell>
+                <span className={`px-2 py-1 rounded-full text-xs ${getPriorityColor(deal.priority)}`}>
+                  {deal.priority}
+                </span>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        Edit
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Edit Deal</DialogTitle>
+                      </DialogHeader>
+                      <DealForm
+                        defaultValues={deal}
+                        onSubmit={(data) =>
+                          updateDealMutation.mutate({ id: deal.id, data })
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => deleteDealMutation.mutate(deal.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}
