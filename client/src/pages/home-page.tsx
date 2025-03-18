@@ -1,13 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
-import { Deal, Project } from "@shared/schema";
+import { Deal } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Building2, FolderKanban, Plus } from "lucide-react";
+import { Building2, Home, PieChart, Users, Plus } from "lucide-react";
 
 export default function HomePage() {
   const { data: deals } = useQuery<Deal[]>({ queryKey: ["/api/deals"] });
-  
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -56,10 +56,16 @@ export default function HomePage() {
                 Manage Deals
               </Button>
             </Link>
-            <Link href="/projects">
+            <Link href="/dashboard">
               <Button variant="outline" className="w-full justify-start">
-                <FolderKanban className="w-4 h-4 mr-2" />
-                View Projects
+                <PieChart className="w-4 h-4 mr-2" />
+                View Dashboard
+              </Button>
+            </Link>
+            <Link href="/credits">
+              <Button variant="outline" className="w-full justify-start">
+                <Users className="w-4 h-4 mr-2" />
+                View Credits
               </Button>
             </Link>
           </CardContent>
