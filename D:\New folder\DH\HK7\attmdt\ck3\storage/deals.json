@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "accountName": "Huy",
+    "dealName": "Amazon ",
+    "quarter": "Q1/2023",
+    "status": "Done",
+    "priority": "Low",
+    "area": "Vũng Tàu",
+    "id": 1,
+    "createdAt": "2025-03-18T12:46:39.324Z",
+    "updatedAt": "2025-03-18T12:46:39.324Z"
+  }
+]
