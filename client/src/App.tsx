@@ -8,8 +8,7 @@ import NotFound from "@/pages/not-found";
 import AuthPage from "@/pages/auth-page";
 import HomePage from "@/pages/home-page";
 import DealsPage from "@/pages/deals-page";
-import DashboardPage from "@/pages/dashboard-page";
-import CreditsPage from "@/pages/credits-page";
+import ProjectsPage from "@/pages/projects-page";
 import Navbar from "@/components/navigation/navbar";
 
 function Router() {
@@ -18,8 +17,7 @@ function Router() {
       <Route path="/auth" component={AuthPage} />
       <ProtectedRoute path="/" component={HomePage} />
       <ProtectedRoute path="/deals" component={DealsPage} />
-      <ProtectedRoute path="/dashboard" component={DashboardPage} />
-      <ProtectedRoute path="/credits" component={CreditsPage} />
+      <ProtectedRoute path="/projects" component={ProjectsPage} />
       <Route component={NotFound} />
     </Switch>
   );
