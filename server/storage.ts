@@ -1,51 +1,28 @@
 import { IStorage } from "./types";
 import createMemoryStore from "memorystore";
 import session from "express-session";
-import {
-  User,
-  InsertUser,
-  Deal,
-  InsertDeal,
-  Vendor,
-  InsertVendor,
-  Project,
-  InsertProject,
-  Task,
-  InsertTask,
-} from "@shared/schema";
+import { User, InsertUser, Deal, InsertDeal } from "@shared/schema";
 
 const MemoryStore = createMemoryStore(session);
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private deals: Map<number, Deal>;
-  private vendors: Map<number, Vendor>;
-  private projects: Map<number, Project>;
-  private tasks: Map<number, Task>;
   readonly sessionStore: session.Store;
   private currentIds: {
     users: number;
     deals: number;
-    vendors: number;
-    projects: number;
-    tasks: number;
   };
 
   constructor() {
     this.users = new Map();
     this.deals = new Map();
-    this.vendors = new Map();
-    this.projects = new Map();
-    this.tasks = new Map();
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000,
     });
     this.currentIds = {
       users: 1,
       deals: 1,
-      vendors: 1,
-      projects: 1,
-      tasks: 1,
     };
   }
 
@@ -73,6 +50,7 @@ export class MemStorage implements IStorage {
     const deal = {
       ...insertDeal,
       id,
+      position: await this.getNextDealPosition(),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -80,10 +58,15 @@ export class MemStorage implements IStorage {
     return deal;
   }
 
+  private async getNextDealPosition(): Promise<number> {
+    const deals = Array.from(this.deals.values());
+    return deals.length > 0 ? Math.max(...deals.map(d => d.position)) + 1 : 0;
+  }
+
   async updateDeal(id: number, deal: Partial<InsertDeal>): Promise<Deal> {
     const existingDeal = this.deals.get(id);
     if (!existingDeal) throw new Error("Deal not found");
-    
+
     const updatedDeal = {
       ...existingDeal,
       ...deal,
@@ -93,60 +76,22 @@ export class MemStorage implements IStorage {
     return updatedDeal;
   }
 
+  async updateDealPositions(updates: { id: number; position: number }[]): Promise<void> {
+    for (const update of updates) {
+      const deal = this.deals.get(update.id);
+      if (deal) {
+        this.deals.set(update.id, { ...deal, position: update.position });
+      }
+    }
+  }
+
   async getDeals(): Promise<Deal[]> {
-    return Array.from(this.deals.values());
+    return Array.from(this.deals.values())
+      .sort((a, b) => a.position - b.position);
   }
 
-  // Vendor methods
-  async createVendor(insertVendor: InsertVendor): Promise<Vendor> {
-    const id = this.currentIds.vendors++;
-    const vendor = { ...insertVendor, id };
-    this.vendors.set(id, vendor);
-    return vendor;
-  }
-
-  async getVendors(): Promise<Vendor[]> {
-    return Array.from(this.vendors.values());
-  }
-
-  // Project methods
-  async createProject(insertProject: InsertProject): Promise<Project> {
-    const id = this.currentIds.projects++;
-    const project = { ...insertProject, id };
-    this.projects.set(id, project);
-    return project;
-  }
-
-  async getProjects(dealId: number): Promise<Project[]> {
-    return Array.from(this.projects.values()).filter(
-      (project) => project.dealId === dealId
-    );
-  }
-
-  // Task methods
-  async createTask(insertTask: InsertTask): Promise<Task> {
-    const id = this.currentIds.tasks++;
-    const task = { ...insertTask, id };
-    this.tasks.set(id, task);
-    return task;
-  }
-
-  async updateTask(id: number, task: Partial<InsertTask>): Promise<Task> {
-    const existingTask = this.tasks.get(id);
-    if (!existingTask) throw new Error("Task not found");
-    
-    const updatedTask = {
-      ...existingTask,
-      ...task,
-    };
-    this.tasks.set(id, updatedTask);
-    return updatedTask;
-  }
-
-  async getProjectTasks(projectId: number): Promise<Task[]> {
-    return Array.from(this.tasks.values()).filter(
-      (task) => task.projectId === projectId
-    );
+  async deleteDeal(id: number): Promise<void> {
+    this.deals.delete(id);
   }
 }
 
