@@ -62,12 +62,16 @@ export default function DashboardPage() {
     value,
   }));
 
+  const renderCustomLabel = ({ percent }: { percent: number }) => {
+    return `${(percent * 100).toFixed(0)}%`;
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold font-serif">Dashboard</h1>
+        <h1 className="text-3xl font-bold">Dashboard</h1>
         <Select value={selectedQuarter} onValueChange={setSelectedQuarter}>
-          <SelectTrigger className="w-[180px] font-serif">
+          <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select quarter" />
           </SelectTrigger>
           <SelectContent>
@@ -83,10 +87,10 @@ export default function DashboardPage() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="font-serif">Total Deals</CardTitle>
+          <CardTitle>Total Deals</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-4xl font-bold text-primary font-serif">
+          <p className="text-4xl font-bold text-primary">
             {filteredDeals?.length || 0}
           </p>
         </CardContent>
@@ -95,63 +99,77 @@ export default function DashboardPage() {
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="border-primary/20">
           <CardHeader>
-            <CardTitle className="font-serif">Deal Status Distribution</CardTitle>
+            <CardTitle>Deal Status Distribution</CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-center">
-            <PieChart width={400} height={400}>
-              <Pie
-                data={statusChartData}
-                cx={200}
-                cy={200}
-                labelLine={false}
-                outerRadius={150}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) =>
-                  `${name} ${(percent * 100).toFixed(0)}%`
-                }
-              >
-                {statusChartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={STATUS_COLORS[entry.name as keyof typeof STATUS_COLORS]}
-                  />
+          <CardContent>
+            <div className="flex flex-col items-center">
+              <PieChart width={300} height={300}>
+                <Pie
+                  data={statusChartData}
+                  cx={150}
+                  cy={150}
+                  labelLine={false}
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={renderCustomLabel}
+                >
+                  {statusChartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={STATUS_COLORS[entry.name as keyof typeof STATUS_COLORS]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+              <div className="grid grid-cols-3 gap-4 mt-8">
+                {Object.entries(STATUS_COLORS).map(([status, color]) => (
+                  <div key={status} className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded" style={{ backgroundColor: color }} />
+                    <span>{status}</span>
+                  </div>
                 ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
         <Card className="border-primary/20">
           <CardHeader>
-            <CardTitle className="font-serif">Deal Area Distribution</CardTitle>
+            <CardTitle>Deal Area Distribution</CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-center">
-            <PieChart width={400} height={400}>
-              <Pie
-                data={areaChartData}
-                cx={200}
-                cy={200}
-                labelLine={false}
-                outerRadius={150}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) =>
-                  `${name} ${(percent * 100).toFixed(0)}%`
-                }
-              >
-                {areaChartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={AREA_COLORS[entry.name as keyof typeof AREA_COLORS]}
-                  />
+          <CardContent>
+            <div className="flex flex-col items-center">
+              <PieChart width={300} height={300}>
+                <Pie
+                  data={areaChartData}
+                  cx={150}
+                  cy={150}
+                  labelLine={false}
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={renderCustomLabel}
+                >
+                  {areaChartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={AREA_COLORS[entry.name as keyof typeof AREA_COLORS]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+              <div className="grid grid-cols-2 gap-4 mt-8">
+                {Object.entries(AREA_COLORS).map(([area, color]) => (
+                  <div key={area} className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded" style={{ backgroundColor: color }} />
+                    <span>{area}</span>
+                  </div>
                 ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
