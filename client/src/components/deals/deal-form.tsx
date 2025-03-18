@@ -59,13 +59,20 @@ export default function DealForm({ onSubmit, defaultValues }: DealFormProps) {
       priority: defaultValues?.priority || "Medium",
       quarter: defaultValues?.quarter || QUARTERS[3],
       area: defaultValues?.area || "HCM",
-      forecastAmount: defaultValues?.forecastAmount || 0,
+      forecastAmount: defaultValues?.forecastAmount?.toString() || "0",
     },
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit((data) => {
+        // Convert forecastAmount to string before submitting
+        const formattedData = {
+          ...data,
+          forecastAmount: data.forecastAmount.toString(),
+        };
+        onSubmit(formattedData);
+      })} className="space-y-4">
         <FormField
           control={form.control}
           name="accountName"
@@ -213,7 +220,6 @@ export default function DealForm({ onSubmit, defaultValues }: DealFormProps) {
                   type="number" 
                   placeholder="Enter forecast amount"
                   {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
                 />
               </FormControl>
               <FormMessage />
