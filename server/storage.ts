@@ -121,6 +121,21 @@ export class FileStorage implements IStorage {
   async getDeals(): Promise<Deal[]> {
     return this.readJsonFile<Deal[]>(this.dealsFile);
   }
+
+  async saveContributorImage(id: string, image: string): Promise<void> {
+    const filePath = path.join(STORAGE_PATH, `contributor_${id}.json`);
+    this.writeJsonFile(filePath, { image });
+  }
+
+  async getContributorImage(id: string): Promise<string | null> {
+    const filePath = path.join(STORAGE_PATH, `contributor_${id}.json`);
+    try {
+      const data = this.readJsonFile<{image: string}>(filePath);
+      return data.image;
+    } catch {
+      return null;
+    }
+  }
 }
 
 export const storage = new FileStorage();

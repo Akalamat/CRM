@@ -7,6 +7,30 @@ import { insertDealSchema } from "@shared/schema";
 export async function registerRoutes(app: Express): Promise<Server> {
   setupAuth(app);
 
+  // Contributors
+  app.post("/api/contributors/:id/image", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    const image = req.body.image;
+    if (!image) return res.status(400).send("No image provided");
+    
+    try {
+      await storage.saveContributorImage(req.params.id, image);
+      res.sendStatus(200);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  });
+
+  app.get("/api/contributors/:id/image", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    try {
+      const image = await storage.getContributorImage(req.params.id);
+      res.json({ image });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  });
+
   // Deals
   app.get("/api/deals", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);

@@ -21,15 +21,50 @@ const CONTRIBUTORS = [
 export default function CreditsPage() {
   const [customImages, setCustomImages] = useState<Record<string, string>>({});
 
-  const handleImageChange = (contributorId: string) => (event: ChangeEvent<HTMLInputElement>) => {
+  const { data: savedImages } = useQuery({
+    queryKey: ["contributor-images"],
+    queryFn: async () => {
+      const images: Record<string, string> = {};
+      for (const contributor of CONTRIBUTORS) {
+        try {
+          const res = await fetch(`/api/contributors/${contributor.studentId}/image`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.image) images[contributor.studentId] = data.image;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      return images;
+    }
+  });
+
+  useEffect(() => {
+    if (savedImages) {
+      setCustomImages(savedImages);
+    }
+  }, [savedImages]);
+
+  const handleImageChange = (contributorId: string) => async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setCustomImages(prev => ({
-          ...prev,
-          [contributorId]: reader.result as string
-        }));
+      reader.onloadend = async () => {
+        const image = reader.result as string;
+        try {
+          await fetch(`/api/contributors/${contributorId}/image`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image })
+          });
+          setCustomImages(prev => ({
+            ...prev,
+            [contributorId]: image
+          }));
+        } catch (error) {
+          console.error(error);
+        }
       };
       reader.readAsDataURL(file);
     }
