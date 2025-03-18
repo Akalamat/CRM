@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, timestamp, numeric } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -16,7 +16,6 @@ export const deals = pgTable("deals", {
   status: text("status").notNull(),
   priority: text("priority").notNull(),
   area: text("area").notNull(),
-  forecastAmount: numeric("forecast_amount").notNull(),
   position: integer("position").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

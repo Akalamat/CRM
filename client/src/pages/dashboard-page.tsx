@@ -28,7 +28,7 @@ export default function DashboardPage() {
   const { data: deals } = useQuery<Deal[]>({ queryKey: ["/api/deals"] });
 
   const filteredDeals = deals?.filter(deal => deal.quarter === selectedQuarter) || [];
-  
+
   const statusData = Object.entries(
     filteredDeals.reduce((acc, deal) => {
       acc[deal.status] = (acc[deal.status] || 0) + 1;
@@ -96,12 +96,6 @@ export default function DashboardPage() {
               <div>
                 <p className="text-sm text-muted-foreground">Total Deals</p>
                 <p className="text-2xl font-bold">{filteredDeals.length}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Total Forecast Amount</p>
-                <p className="text-2xl font-bold">
-                  ${filteredDeals.reduce((sum, deal) => sum + Number(deal.forecastAmount), 0).toLocaleString()}
-                </p>
               </div>
               <div className="pt-4 space-y-2">
                 {Object.entries(

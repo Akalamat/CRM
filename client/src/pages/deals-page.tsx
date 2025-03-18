@@ -161,7 +161,6 @@ export default function DealsPage() {
               <TableHead>Priority</TableHead>
               <TableHead>Quarter</TableHead>
               <TableHead>Area</TableHead>
-              <TableHead>Forecast (USD)</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -198,7 +197,6 @@ export default function DealsPage() {
                         </TableCell>
                         <TableCell>{deal.quarter}</TableCell>
                         <TableCell>{deal.area}</TableCell>
-                        <TableCell>${deal.forecastAmount.toLocaleString()}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Dialog>

@@ -33,7 +33,7 @@ const QUARTERS = [
 const STATUSES = ["Done", "Progress", "Stuck"];
 const PRIORITIES = ["Low", "Medium", "High"];
 const AREAS = [
-  "Kon Tum", "Phú Yên", "HCM", "HN", "Bình Định",
+  "Kon Tum", "Phú Yên", "Hồ Chí Minh", "Hà Nội", "Bình Định",
   "Kiên Giang", "Đồng Nai", "Vũng Tàu"
 ];
 
@@ -58,8 +58,7 @@ export default function DealForm({ onSubmit, defaultValues }: DealFormProps) {
       status: defaultValues?.status || "Progress",
       priority: defaultValues?.priority || "Medium",
       quarter: defaultValues?.quarter || "Q1/2024",
-      area: defaultValues?.area || "HCM",
-      forecastAmount: defaultValues?.forecastAmount || 0,
+      area: defaultValues?.area || "Hồ Chí Minh",
     },
   });
 
@@ -197,24 +196,6 @@ export default function DealForm({ onSubmit, defaultValues }: DealFormProps) {
                   ))}
                 </SelectContent>
               </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="forecastAmount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Forecast Amount (USD)</FormLabel>
-              <FormControl>
-                <Input 
-                  type="number" 
-                  placeholder="Enter forecast amount"
-                  {...field}
-                />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}
