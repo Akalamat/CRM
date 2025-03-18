@@ -9,31 +9,31 @@ export default function Navbar() {
   if (!user) return null;
 
   return (
-    <nav className="border-b">
+    <nav className="border-b border-primary/20">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-8">
-          <h1 className="text-xl font-bold">CRM System</h1>
+          <h1 className="text-xl font-bold font-serif text-primary">CRM System</h1>
           <div className="flex items-center space-x-4">
             <Link href="/">
-              <Button variant="ghost" className="flex items-center">
+              <Button variant="ghost" className="flex items-center font-serif">
                 <Home className="w-4 h-4 mr-2" />
                 Home
               </Button>
             </Link>
-            <Link href="/dashboard">
-              <Button variant="ghost" className="flex items-center">
-                <PieChart className="w-4 h-4 mr-2" />
-                Dashboard
-              </Button>
-            </Link>
             <Link href="/deals">
-              <Button variant="ghost" className="flex items-center">
+              <Button variant="ghost" className="flex items-center font-serif">
                 <Building2 className="w-4 h-4 mr-2" />
                 Deals
               </Button>
             </Link>
+            <Link href="/dashboard">
+              <Button variant="ghost" className="flex items-center font-serif">
+                <PieChart className="w-4 h-4 mr-2" />
+                Dashboard
+              </Button>
+            </Link>
             <Link href="/credits">
-              <Button variant="ghost" className="flex items-center">
+              <Button variant="ghost" className="flex items-center font-serif">
                 <Users className="w-4 h-4 mr-2" />
                 Credits
               </Button>
@@ -41,7 +41,7 @@ export default function Navbar() {
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-muted-foreground font-serif">
             {user.username}
           </span>
           <Button
