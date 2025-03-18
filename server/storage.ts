@@ -11,7 +11,7 @@ import {
 } from "@shared/schema";
 
 const MemoryStore = createMemoryStore(session);
-const STORAGE_PATH = "D:\\New folder\\DH\\HK7\\attmdt\\ck3\\storage";
+const STORAGE_PATH = "storage";
 
 // Đảm bảo thư mục tồn tại
 if (!fs.existsSync(STORAGE_PATH)) {
