@@ -26,7 +26,9 @@ export default function HomePage() {
             </Link>
           </CardHeader>
           <CardContent>
-            {deals?.slice(0, 5).map((deal) => (
+          {deals?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+              .slice(0, 5)
+              .map((deal) => (
               <div
                 key={deal.id}
                 className="flex items-center justify-between py-2 border-b last:border-0"

@@ -20,5 +20,49 @@
     "id": 2,
     "createdAt": "2025-03-18T12:51:21.009Z",
     "updatedAt": "2025-03-18T12:51:28.830Z"
+  },
+  {
+    "accountName": "Nuu",
+    "dealName": "Baidu",
+    "quarter": "Q4/2023",
+    "status": "Progress",
+    "priority": "Medium",
+    "area": "Kiên Giang",
+    "id": 3,
+    "createdAt": "2025-03-18T16:52:44.200Z",
+    "updatedAt": "2025-03-18T16:52:44.200Z"
+  },
+  {
+    "accountName": "Danh",
+    "dealName": "Shoppee",
+    "quarter": "Q2/2024",
+    "status": "Stuck",
+    "priority": "High",
+    "area": "Phú Yên",
+    "id": 4,
+    "createdAt": "2025-03-18T16:53:17.407Z",
+    "updatedAt": "2025-03-18T16:53:17.407Z"
+  },
+  {
+    "accountName": "Zxc",
+    "dealName": "Darkweb",
+    "quarter": "Q2/2025",
+    "status": "Stuck",
+    "priority": "Low",
+    "area": "Bình Định",
+    "id": 5,
+    "createdAt": "2025-03-18T17:09:11.252Z",
+    "updatedAt": "2025-03-18T17:09:11.252Z"
+  },
+  {
+    "accountName": "Poi",
+    "dealName": "Window",
+    "quarter": "Q2/2023",
+    "status": "Done",
+    "priority": "High",
+    "area": "Bình Định",
+    "id": 6,
+    "createdAt": "2025-03-18T17:15:59.130Z",
+    "updatedAt": "2025-03-18T17:15:59.130Z"
   }
 ]
