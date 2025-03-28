@@ -12,9 +12,6 @@ Sinh viên thực hiện: LÊ TRẦN QUANG HUY
 
 MSSV: 22150533
 
-Sinh viên thực hiện: TRẦN CAO DANH 
-
-MSSV: 22150429
 
 Lớp học phần: 020100115402
 
